@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://bvuff2hrief1t"]
+
+[ext_resource type="Script" uid="uid://dlfyaek1f5v6e" path="res://script/map_maker.gd" id="1_gluko"]
+[ext_resource type="PackedScene" uid="uid://cvmcygrmqlmgq" path="res://scenes/map.tscn" id="1_yrtib"]
+[ext_resource type="Script" uid="uid://dmymsj4rxipyg" path="res://script/map_maker_menu.gd" id="2_adfud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fwpih"]
+bg_color = Color(0.47624677, 0.25759906, 0.93463206, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yrtib"]
+bg_color = Color(0.3545615, 0.1313639, 0.7418209, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl52m"]
+bg_color = Color(0.3545615, 0.1313639, 0.7418209, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yrtib"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adfud"]
+bg_color = Color(0.4152638, 0.3337419, 0.70722705, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gluko"]
+bg_color = Color(0.5711904, 0.5635873, 0.8496743, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mntf"]
+bg_color = Color(0.7590977, 0.4741075, 0.6194246, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.97076744, 0.7952006, 0.9187936, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hhcyl"]
+bg_color = Color(0.95735663, 0.6533514, 0.87054414, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.97076744, 0.7952006, 0.9187936, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kjevn"]
+bg_color = Color(0.6303628, 0.35592583, 0.49830902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.97076744, 0.7952006, 0.9187936, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxeng"]
+bg_color = Color(0.49808323, 0.41528174, 0.429561, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8962795, 0.83895344, 0.8709283, 1)
+
+[node name="Map Maker" type="Control" unique_id=540674096]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gluko")
+
+[node name="Map" parent="." unique_id=1880370230 instance=ExtResource("1_yrtib")]
+
+[node name="Map Maker Menu" type="FoldableContainer" parent="." unique_id=124910231]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 94.0
+grow_horizontal = 2
+theme_override_styles/title_panel = SubResource("StyleBoxFlat_fwpih")
+theme_override_styles/title_hover_panel = SubResource("StyleBoxFlat_yrtib")
+theme_override_styles/title_collapsed_panel = SubResource("StyleBoxFlat_fwpih")
+theme_override_styles/title_collapsed_hover_panel = SubResource("StyleBoxFlat_rl52m")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_yrtib")
+script = ExtResource("2_adfud")
+
+[node name="TabContainer" type="TabContainer" parent="Map Maker Menu" unique_id=1285108347]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_adfud")
+theme_override_styles/tabbar_background = SubResource("StyleBoxFlat_gluko")
+current_tab = 0
+
+[node name="Tab1" type="HBoxContainer" parent="Map Maker Menu/TabContainer" unique_id=977430463]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Mur" type="MenuButton" parent="Map Maker Menu/TabContainer/Tab1" unique_id=226412924]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mntf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hhcyl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kjevn")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_vxeng")
+text = "Mur"
+flat = false
+item_count = 3
+popup/item_0/text = "Ligne"
+popup/item_0/id = 0
+popup/item_1/text = "Rectangle"
+popup/item_1/id = 1
+popup/item_2/text = "Free"
+popup/item_2/id = 2
