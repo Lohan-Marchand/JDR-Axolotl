@@ -18,6 +18,7 @@ func mur_pressed(id):
 			current_tool="rectangle"
 		2:
 			current_tool="free"
+	get_parent().change_tool()
 
 
 func get_current_tool():

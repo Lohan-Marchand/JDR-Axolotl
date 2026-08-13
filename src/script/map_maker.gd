@@ -14,6 +14,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+func change_tool():
+	if currently_shaping:
+		if current_shape.get_type()!=map_maker_menu.get_current_tool():
+			current_shape.toggle_points(false)
+			current_shape.queue_free()
+			currently_shaping=false
+
 func point_left_pressed(point : Node):
 	if map_maker_menu.get_current_categorie() == "wall":
 		build_wall(point)
@@ -29,11 +36,6 @@ func point_hover(point : Node, state : bool):
 
 
 func build_wall(point : Node):
-	if currently_shaping:
-		if current_shape.get_type()!=map_maker_menu.get_current_tool():
-			current_shape.queue_free()
-			currently_shaping=false
-	
 	if !currently_shaping :
 		var new_shape = Shape.instantiate()
 		shapes.add_child(new_shape)
@@ -53,11 +55,7 @@ func build_wall(point : Node):
 
 func hover_wall(point : Node,state :bool):
 	if currently_shaping:
-		if current_shape.get_type()!=map_maker_menu.get_current_tool():
-			current_shape.queue_free()
-			currently_shaping=false
-		else:
-			current_shape.preview_add_point(point,state)
+		current_shape.preview_add_point(point,state)
 
 func close_wall(point : Node):
 	if currently_shaping:
