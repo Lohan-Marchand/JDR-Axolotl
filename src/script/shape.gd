@@ -36,6 +36,7 @@ func add_or_remove_point(point : Node):
 				toggle_points(false)
 				return 1
 		"rectangle":
+			line_2d.closed=true
 			if !point.get_toggle_state():
 				if line_2d.get_point_count()==0:
 					add_point(point)
@@ -43,13 +44,10 @@ func add_or_remove_point(point : Node):
 					add_point(_grid.get_point(Vector2(point.get_coord().x,_tab_point.get(0).get_coord().y)))
 					add_point(point)
 					add_point(_grid.get_point(Vector2(_tab_point.get(0).get_coord().x,point.get_coord().y)))
-					add_point(_tab_point.get(0))
+					toggle_points(false)
+					return 1
 			else:
 				remove_point(point)
-			
-			if line_2d.get_point_count()==5:
-				toggle_points(false)
-				return 1
 		"free":
 			if !point.get_toggle_state():
 				add_point(point)
@@ -59,7 +57,10 @@ func add_or_remove_point(point : Node):
 		return -1
 
 func close_free(point : Node):
-	add_point(point)
+	if point == _tab_point.get(0):
+		line_2d.closed=true
+	else:if point !=_tab_point.get(_tab_point.size()-1):
+		add_point(point)
 	toggle_points(false)
 	
 
