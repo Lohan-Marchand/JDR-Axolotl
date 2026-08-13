@@ -3,10 +3,12 @@ extends Node2D
 var _size= Vector2(25,50)
 const Point = preload("uid://br8nuh81uqati")
 var tab_point : Dictionary[Vector2, Node]
+var map_maker : Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	generate_grid(_size)
+	map_maker= get_parent().get_parent()
 	pass # Replace with function body.
 
 func generate_grid(size : Vector2 ):
@@ -16,13 +18,14 @@ func generate_grid(size : Vector2 ):
 			var new_button : Button = new_point.get_child(0)
 			
 			new_button.pressed.connect(func point_pressed():
-				get_parent().get_parent().point_pressed(Vector2(x,y),new_point.get_toggle_state())
+				
+				map_maker.point_pressed(new_point)
 			)
 			new_button.mouse_entered.connect(func point_hover_in():
-				get_parent().get_parent().point_hover(Vector2(x,y),true)
+				map_maker.point_hover(new_point,true)
 			)
 			new_button.mouse_exited.connect(func point_hover_out():
-				get_parent().get_parent().point_hover(Vector2(x,y),false)
+				map_maker.point_hover(new_point,false)
 			)
 			
 			tab_point.set(Vector2(x,y),new_point)
@@ -32,3 +35,9 @@ func generate_grid(size : Vector2 ):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func toggle_button(coord : Vector2, state : bool):
+	tab_point.get(coord).toggle(state)
+
+func get_point(coord : Vector2):
+	return tab_point.get(coord)

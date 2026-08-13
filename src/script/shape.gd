@@ -1,11 +1,13 @@
 extends Node2D
 @onready var line_2d: Line2D = $Line2D
 @onready var preview_line_2d: Line2D = $PreviewLine2D
-
 var _type : String
+var _tab_point : Array[Node]
+var _grid: Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	_grid = get_parent().get_parent().get_child(2)
 	pass # Replace with function body.
 
 
@@ -19,64 +21,87 @@ func set_type(type : String):
 func get_type():
 	return _type
 
-func add_or_remove_point(coord : Vector2, state : bool):
+func add_or_remove_point(point : Node):
 	match _type:
 		"":
+			toggle_points(false)
 			return 1
-		"Ligne":
-			if state:
-				line_2d.add_point(coord)
+		"line":
+			if !point.get_toggle_state():
+				add_point(point)
 			else:
-				line_2d.remove_point(line_2d.points.rfind(coord))
+				remove_point(point)
 			
 			if line_2d.get_point_count()==2:
+				toggle_points(false)
 				return 1
-		"Rectangle":
-			if state:
+		"rectangle":
+			if !point.get_toggle_state():
 				if line_2d.get_point_count()==0:
-					line_2d.add_point(coord)
+					add_point(point)
 				else:
-					line_2d.add_point(Vector2(coord.x,line_2d.get_point_position(0).y))
-					line_2d.add_point(coord)
-					line_2d.add_point(Vector2(line_2d.get_point_position(0).x,coord.y))
-					line_2d.add_point(line_2d.get_point_position(0))
+					add_point(_grid.get_point(Vector2(point.get_coord().x,_tab_point.get(0).get_coord().y)))
+					add_point(point)
+					add_point(_grid.get_point(Vector2(_tab_point.get(0).get_coord().x,point.get_coord().y)))
+					add_point(_tab_point.get(0))
 			else:
-				line_2d.remove_point(line_2d.points.rfind(coord))
+				remove_point(point)
 			
 			if line_2d.get_point_count()==5:
+				toggle_points(false)
 				return 1
-		"Free":
-			if state:
-				line_2d.add_point(coord)
+		"free":
+			if !point.get_toggle_state():
+				add_point(point)
 			else:
-				line_2d.remove_point(line_2d.points.rfind(coord))
+				remove_point(point)
+	if line_2d.get_point_count()==0:
+		return -1
 
-func preview_add_point(coord : Vector2, state : bool):
-	preview_line_2d.add_point(line_2d.get_point_position(line_2d.get_point_count()-1))
+func add_point(point : Node):
+	point.toggle(true)
+	line_2d.add_point(point.get_coord()*32)
+	_tab_point.push_back(point)
+
+func remove_point(point : Node):
+	point.toggle(false)
+	var point_to_remove : int =_tab_point.find(point)
+	line_2d.remove_point(point_to_remove)
+	_tab_point.remove_at(point_to_remove)
+
+func preview_add_point(point : Node, state : bool):
+	if state:
+		preview_line_2d.add_point(line_2d.get_point_position(line_2d.get_point_count()-1))
+	else:
+		preview_line_2d.remove_point(0)
 	match _type:
 		"":
 			return 1
-		"Ligne":
+		"line":
 			if state:
-				preview_line_2d.add_point(coord)
+				preview_line_2d.add_point(point.get_coord()*32)
 			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(coord))
-		"Rectangle":
+				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
+		"rectangle":
 			if state:
 				if preview_line_2d.get_point_count()==0:
-					preview_line_2d.add_point(coord)
+					preview_line_2d.add_point(point.get_coord()*32)
 				else:
-					preview_line_2d.add_point(Vector2(coord.x,preview_line_2d.get_point_position(0).y))
-					preview_line_2d.add_point(coord)
-					preview_line_2d.add_point(Vector2(preview_line_2d.get_point_position(0).x,coord.y))
+					preview_line_2d.add_point(Vector2(point.get_coord().x*32,preview_line_2d.get_point_position(0).y))
+					preview_line_2d.add_point(point.get_coord()*32)
+					preview_line_2d.add_point(Vector2(preview_line_2d.get_point_position(0).x,point.get_coord().y*32))
 					preview_line_2d.add_point(preview_line_2d.get_point_position(0))
 			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(coord.x,preview_line_2d.get_point_position(0).y)))
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(coord))
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(preview_line_2d.get_point_position(0).x,coord.y)))
+				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(point.get_coord().x*32,preview_line_2d.get_point_position(0).y)))
+				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
+				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(preview_line_2d.get_point_position(0).x,point.get_coord().y*32)))
 				preview_line_2d.remove_point(0)
-		"Free":
+		"free":
 			if state:
-				preview_line_2d.add_point(coord)
+				preview_line_2d.add_point(point.get_coord()*32)
 			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(coord))
+				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
+
+func toggle_points(state : bool):
+	for point in _tab_point :
+		point.toggle(state)

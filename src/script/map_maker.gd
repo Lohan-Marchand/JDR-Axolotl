@@ -10,12 +10,21 @@ var current_shape : Node
 func _ready() -> void:
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-	
-func point_pressed(coord : Vector2, state : bool):
+
+func point_pressed(point : Node):
+	if map_maker_menu.get_current_categorie() == "wall":
+		build_wall(point)
+
+func point_hover(point : Node, state : bool):
+	if map_maker_menu.get_current_categorie() == "wall":
+		hover_wall(point, state)
+
+
+
+func build_wall(point : Node):
 	if currently_shaping:
 		if current_shape.get_type()!=map_maker_menu.get_current_tool():
 			current_shape.queue_free()
@@ -27,15 +36,21 @@ func point_pressed(coord : Vector2, state : bool):
 		new_shape.set_type(map_maker_menu.get_current_tool())
 		currently_shaping =true
 		current_shape = new_shape
-
-	if(current_shape.add_or_remove_point(coord*32,state)==1):
+	
+	var result = current_shape.add_or_remove_point(point)
+	if(result==1):
 		currently_shaping=false
 		current_shape= null
+	else:if(result==-1):
 		
-func point_hover(coord : Vector2, state : bool):
+		currently_shaping=false
+		current_shape.queue_free()
+		current_shape= null
+
+func hover_wall(point : Node,state :bool):
 	if currently_shaping:
 		if current_shape.get_type()!=map_maker_menu.get_current_tool():
 			current_shape.queue_free()
 			currently_shaping=false
 		else:
-			current_shape.preview_add_point(coord*32,state)
+			current_shape.preview_add_point(point,state)
