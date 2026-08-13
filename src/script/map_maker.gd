@@ -14,9 +14,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func point_pressed(point : Node):
+func point_left_pressed(point : Node):
 	if map_maker_menu.get_current_categorie() == "wall":
 		build_wall(point)
+
+func point_right_pressed(point : Node):
+	if map_maker_menu.get_current_categorie() == "wall" && map_maker_menu.get_current_tool() == "free" :
+		close_wall(point)
 
 func point_hover(point : Node, state : bool):
 	if map_maker_menu.get_current_categorie() == "wall":
@@ -54,3 +58,9 @@ func hover_wall(point : Node,state :bool):
 			currently_shaping=false
 		else:
 			current_shape.preview_add_point(point,state)
+
+func close_wall(point : Node):
+	if currently_shaping:
+		current_shape.close_free(point)
+		currently_shaping=false
+		current_shape= null

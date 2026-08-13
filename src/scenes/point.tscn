@@ -71,3 +71,5 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_r0uly")
 theme_override_styles/hover = SubResource("StyleBoxFlat_tue75")
 theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_imn7a")
 theme_override_styles/focus = SubResource("StyleBoxFlat_r0uly")
+
+[connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]

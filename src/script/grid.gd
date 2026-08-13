@@ -17,9 +17,11 @@ func generate_grid(size : Vector2 ):
 			var new_point = Point.instantiate()
 			var new_button : Button = new_point.get_child(0)
 			
-			new_button.pressed.connect(func point_pressed():
-				
-				map_maker.point_pressed(new_point)
+			new_point.left_pressed.connect(func point_left_pressed():
+				map_maker.point_left_pressed(new_point)
+			)
+			new_point.right_pressed.connect(func point_right_pressed():
+				map_maker.point_right_pressed(new_point)
 			)
 			new_button.mouse_entered.connect(func point_hover_in():
 				map_maker.point_hover(new_point,true)

@@ -7,6 +7,9 @@ var hover_on : StyleBoxFlat
 var hover_off : StyleBoxFlat
 var _coord : Vector2
 
+signal left_pressed
+signal right_pressed
+
 func set_coord(coord : Vector2):
 	_coord = coord
 	self.global_position=coord*32
@@ -37,3 +40,12 @@ func get_toggle_state():
 
 func get_coord():
 	return _coord
+
+
+func _on_button_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				left_pressed.emit()
+			MOUSE_BUTTON_RIGHT:
+				right_pressed.emit()
