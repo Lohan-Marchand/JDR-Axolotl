@@ -68,6 +68,7 @@ func add_point(point : Node):
 	point.toggle(true)
 	line_2d.add_point(point.get_coord()*32)
 	_tab_point.push_back(point)
+	
 
 func remove_point(point : Node):
 	point.toggle(false)
@@ -108,7 +109,9 @@ func preview_add_point(point : Node, state : bool):
 			else:
 				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
 
-
 func toggle_points(state : bool):
 	for point in _tab_point :
 		point.toggle(state)
+
+func remove_preview():
+	preview_line_2d.clear_points()

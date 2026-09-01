@@ -14,7 +14,7 @@ config/name="JDR-Axolotl"
 config/description="Une application de gestion de Jeu de Rôle permettant entre autre de créer des maps, de les utiliser et de créer des fiches de personnages."
 run/main_scene="uid://djlvwqg1stab6"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://cbyfv8x2b0kjb"
 
 [display]
 

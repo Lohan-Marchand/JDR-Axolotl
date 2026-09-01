@@ -8,3 +8,4 @@ script = ExtResource("1_2qewn")
 [node name="Line2D" type="Line2D" parent="." unique_id=951286277]
 
 [node name="PreviewLine2D" type="Line2D" parent="." unique_id=1603315630]
+default_color = Color(1, 0.07058824, 0.2784314, 0.5137255)

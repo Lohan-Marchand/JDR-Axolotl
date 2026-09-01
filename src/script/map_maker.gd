@@ -46,6 +46,7 @@ func build_wall(point : Node):
 	var result = current_shape.add_or_remove_point(point)
 	if(result==1):
 		currently_shaping=false
+		current_shape.remove_preview()
 		current_shape= null
 	else:if(result==-1):
 		
@@ -61,4 +62,5 @@ func close_wall(point : Node):
 	if currently_shaping:
 		current_shape.close_free(point)
 		currently_shaping=false
+		current_shape.remove_preview()
 		current_shape= null
