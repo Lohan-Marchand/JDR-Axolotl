@@ -104,3 +104,26 @@ popup/item_1/text = "Rectangle"
 popup/item_1/id = 1
 popup/item_2/text = "Free"
 popup/item_2/id = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1191820371]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -155.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="zoom in" type="Button" parent="HBoxContainer" unique_id=507151102]
+layout_mode = 2
+text = "zoom in"
+
+[node name="zoom out" type="Button" parent="HBoxContainer" unique_id=421367799]
+layout_mode = 2
+text = "zoom out"
+
+[connection signal="pressed" from="HBoxContainer/zoom in" to="." method="_on_zoom_in_pressed"]
+[connection signal="pressed" from="HBoxContainer/zoom out" to="." method="_on_zoom_out_pressed"]

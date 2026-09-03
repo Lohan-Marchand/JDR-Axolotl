@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn1sqac63atny"
-path="res://.godot/imported/wood_bark.png-d38be1fe07d57a48766aebd6bb79ae94.ctex"
+uid="uid://hgypgldhtn5k"
+path="res://.godot/imported/OBEY.png-5d324ba89eec6fe259b17d0a47003061.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/wood_bark.png"
-dest_files=["res://.godot/imported/wood_bark.png-d38be1fe07d57a48766aebd6bb79ae94.ctex"]
+source_file="res://assets/tiles/OBEY.png"
+dest_files=["res://.godot/imported/OBEY.png-5d324ba89eec6fe259b17d0a47003061.ctex"]
 
 [params]
 

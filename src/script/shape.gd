@@ -4,16 +4,28 @@ extends Node2D
 var _type : String
 var _tab_point : Array[Node]
 var _grid: Node2D
+var _map : Node2D
+var _texture : String
+var _shaders : ShaderMaterial
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_grid = get_parent().get_parent().get_child(2)
+	_map = get_parent().get_parent()
+	_shaders = line_2d.material
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	_shaders.set_shader_parameter("scale",_map.scale.x)
 	pass
+
+func change_texture(texture_path : String,texture_size : int):
+	_texture = texture_path
+	_shaders.set_shader_parameter("texture",load("res://assets/tiles/"+_texture))
+	_shaders.set_shader_parameter("tile_size",texture_size)
 
 func set_type(type : String):
 	_type= type

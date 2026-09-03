@@ -1,6 +1,8 @@
 extends Control
 @onready var map_maker_menu: FoldableContainer = $"Map Maker Menu"
 @onready var shapes: Node2D = $Map/Shapes
+@onready var map: Node2D = $Map
+
 const Shape = preload("uid://b8sdcw5jj5ldo")
 
 var currently_shaping : bool = false
@@ -64,3 +66,12 @@ func close_wall(point : Node):
 		currently_shaping=false
 		current_shape.remove_preview()
 		current_shape= null
+
+
+
+func _on_zoom_in_pressed() -> void:
+	map.scale*=2
+
+
+func _on_zoom_out_pressed() -> void:
+	map.scale/=2

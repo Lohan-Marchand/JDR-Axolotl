@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://b8sdcw5jj5ldo"]
 
 [ext_resource type="Script" uid="uid://cje4vuo63wk7k" path="res://script/shape.gd" id="1_2qewn"]
+[ext_resource type="Material" uid="uid://ceypiss2arvp4" path="res://shaders/shader_tile.tres" id="2_nodf0"]
 
 [node name="shape" type="Node2D" unique_id=2069528101]
 script = ExtResource("1_2qewn")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=951286277]
+material = ExtResource("2_nodf0")
 
 [node name="PreviewLine2D" type="Line2D" parent="." unique_id=1603315630]
 default_color = Color(1, 0.07058824, 0.2784314, 0.5137255)

@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ceypiss2arvp4"]
+
+[ext_resource type="Shader" uid="uid://dte6w36bk5v2d" path="res://shaders/visual_shader_tile.tres" id="1_rbyub"]
+[ext_resource type="Texture2D" uid="uid://hgypgldhtn5k" path="res://assets/tiles/OBEY.png" id="2_rbyub"]
+
+[resource]
+shader = ExtResource("1_rbyub")
+shader_parameter/Tiling = 1.0
+shader_parameter/tile_size = 32.0
+shader_parameter/scale = 1.0
+shader_parameter/texture = ExtResource("2_rbyub")
