@@ -83,7 +83,11 @@ func point_left_click(tool,point: Node):
 				point_hover(tool,point,false)
 				done()
 		map_maker.Tool.FREE:
-			add_point_at_end(point)
+			if(!tab_line.is_empty() && point == last_point):
+				done()
+			else:
+				add_point_at_end(point)
+	point_hover(tool,point,false)
 	
 func point_right_click(tool,point: Node):
 	match tool:

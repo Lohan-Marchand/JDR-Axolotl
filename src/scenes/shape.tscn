@@ -7,10 +7,11 @@
 [node name="shape" type="Node2D" unique_id=2069528101]
 script = ExtResource("1_2qewn")
 
-[node name="Line2D" type="Line2D" parent="." unique_id=951286277]
-material = ExtResource("2_nodf0")
-
 [node name="PreviewShape" type="Line2D" parent="." unique_id=1603315630]
 closed = true
+width = 14.0
 default_color = Color(1, 0.07058824, 0.2784314, 0.5137255)
 script = ExtResource("3_o8q4y")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=951286277]
+material = ExtResource("2_nodf0")
