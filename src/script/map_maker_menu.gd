@@ -1,8 +1,6 @@
 extends FoldableContainer
 @onready var mur: MenuButton = $TabContainer/Tab1/Mur
-
-var current_tool : String =""
-var current_categorie : String =""
+@onready var map_maker: Control = $".."
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,23 +8,10 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func mur_pressed(id):
-	current_categorie = "wall"
 	match id:
 		0:
-			current_tool="line"
+			map_maker.change_tool(map_maker.ToolCategorie.WALL, map_maker.Tool.LINE)
 		1:
-			current_tool="rectangle"
+			map_maker.change_tool(map_maker.ToolCategorie.WALL,map_maker.Tool.RECTANGLE)
 		2:
-			current_tool="free"
-	get_parent().change_tool()
-
-
-func get_current_tool():
-	return current_tool
-
-func get_current_categorie():
-	return current_categorie
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+			map_maker.change_tool(map_maker.ToolCategorie.WALL,map_maker.Tool.FREE)

@@ -1,129 +1,172 @@
 extends Node2D
-@onready var line_2d: Line2D = $Line2D
-@onready var preview_line_2d: Line2D = $PreviewLine2D
-var _type : String
-var _tab_point : Array[Node]
-var _grid: Node2D
-var _map : Node2D
-var _texture : String
-var _shaders : ShaderMaterial
 
+class Line:
+	var point_a : Node
+	var point_b : Node
+	func _init(a:Node,b:Node):
+		set_point_a(a)
+		set_point_b(b)
+	func set_point_a(a : Node):
+		point_a = a
+	func set_point_b(b : Node):
+		point_b = b
+	func get_point_a():
+		return point_a
+	func get_point_b():
+		return point_b
+
+@onready var line_2d: Line2D = $Line2D
+@onready var preview_line_2d: Line2D = $PreviewShape
+@onready var map_maker: Control = $"../../.."
+@onready var shapes: Node2D = $".."
+var grid: Node2D
+var map : Node2D
+
+var texture : String
+var shaders : ShaderMaterial
+
+#var closed :bool =false
+var tab_line : Array[Line]
+var last_point : Node = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	_grid = get_parent().get_parent().get_child(2)
-	_map = get_parent().get_parent()
-	_shaders = line_2d.material
+	grid = get_parent().get_child(0)
+	map = get_parent().get_parent()
+	shaders = line_2d.material
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	_shaders.set_shader_parameter("scale",_map.scale.x)
+	shaders.set_shader_parameter("scale",map.scale.x)
 	pass
 
 func change_texture(texture_path : String,texture_size : int):
-	_texture = texture_path
-	_shaders.set_shader_parameter("texture",load("res://assets/tiles/"+_texture))
-	_shaders.set_shader_parameter("tile_size",texture_size)
+	texture = texture_path
+	shaders.set_shader_parameter("texture",load("res://assets/tiles/"+texture))
+	shaders.set_shader_parameter("tile_size",texture_size)
 
-func set_type(type : String):
-	_type= type
+func get_first_point():
+	if (tab_line.size()>0):
+		return tab_line[0].get_point_a()
+	else:
+		return last_point
 
-func get_type():
-	return _type
-
-func add_or_remove_point(point : Node):
-	match _type:
-		"":
-			toggle_points(false)
-			return 1
-		"line":
-			if !point.get_toggle_state():
-				add_point(point)
-			else:
-				remove_point(point)
-			
-			if line_2d.get_point_count()==2:
-				toggle_points(false)
-				return 1
-		"rectangle":
-			line_2d.closed=true
-			if !point.get_toggle_state():
-				if line_2d.get_point_count()==0:
-					add_point(point)
-				else:
-					add_point(_grid.get_point(Vector2(point.get_coord().x,_tab_point.get(0).get_coord().y)))
-					add_point(point)
-					add_point(_grid.get_point(Vector2(_tab_point.get(0).get_coord().x,point.get_coord().y)))
-					toggle_points(false)
-					return 1
-			else:
-				remove_point(point)
-		"free":
-			if !point.get_toggle_state():
-				add_point(point)
-			else:
-				remove_point(point)
-	if line_2d.get_point_count()==0:
+func get_last_line_with(point : Node):# cherche la dernière ligne commencant par le point passé en param ;-1 signifie que le point est le dernier point, -2 signifie que le point n'est pas dans le tableau
+	if(last_point==point):
 		return -1
+	for n in range (tab_line.size()-1,-1,-1):
+		if (tab_line[n].get_point_a()==point):
+			return n
+	return -2
 
-func close_free(point : Node):
-	if point == _tab_point.get(0):
-		line_2d.closed=true
-	else:if point !=_tab_point.get(_tab_point.size()-1):
-		add_point(point)
-	toggle_points(false)
+func has_point(point : Node):
+	if(last_point==point):
+		return true
+	for n in range (tab_line.size()-1,-1,-1):
+		if (tab_line[n].get_point_a()==point):
+			return true
+	return false
+
+func point_left_click(tool,point: Node):
+	match tool:
+		map_maker.Tool.LINE:
+			#closed=false
+			add_point_at_end(point)
+			if tab_line.size()==1:
+				point_hover(tool,point,false)
+				done()
+		map_maker.Tool.RECTANGLE:
+			#closed=true
+			add_point_rectangle(point)
+			if tab_line.size()==4:
+				point_hover(tool,point,false)
+				done()
+		map_maker.Tool.FREE:
+			add_point_at_end(point)
 	
+func point_right_click(tool,point: Node):
+	match tool:
+		map_maker.Tool.LINE:
+			remove_point(point)
+		map_maker.Tool.RECTANGLE:
+			remove_point(point)
+			if tab_line.size()==4:
+				done()
+		map_maker.Tool.FREE:
+			remove_point(point)
 
-func add_point(point : Node):
+func point_hover(tool,point : Node,state : bool):
+	if(last_point==null):
+		return
+	match tool:
+		map_maker.Tool.LINE:
+			if(state):
+				preview_line_2d.set_line(last_point,point)
+			else:
+				preview_line_2d.clear_points()
+		map_maker.Tool.RECTANGLE:
+			if(state):
+				preview_line_2d.set_rectangle(last_point,point)
+			else:
+				preview_line_2d.clear_points()
+
+		map_maker.Tool.FREE:
+			if(state):
+				preview_line_2d.set_line(last_point,point)
+			else:
+				preview_line_2d.clear_points()
+
+func add_point_rectangle(point : Node):
+	if (last_point==null):
+		last_point=point
+	else:
+		add_point_at_end(grid.get_point(Vector2(point.get_coord().x,get_first_point().get_coord().y)))
+		add_point_at_end(point)
+		add_point_at_end(grid.get_point(Vector2(get_first_point().get_coord().x,point.get_coord().y)))
+		add_point_at_end(get_first_point())
+		calculate_shape()
+
+func add_point_at_end(point : Node):
 	point.toggle(true)
-	line_2d.add_point(point.get_coord()*32)
-	_tab_point.push_back(point)
-	
+	if(last_point==null):
+		last_point=point
+	else:
+		tab_line.push_back(Line.new(last_point,point))
+		last_point=point
+	calculate_shape()
 
 func remove_point(point : Node):
-	point.toggle(false)
-	var point_to_remove : int =_tab_point.find(point)
-	line_2d.remove_point(point_to_remove)
-	_tab_point.remove_at(point_to_remove)
+	if (point.get_toggle_state()):
+		var n = get_last_line_with(point)
+		if(n==-1):
+			var line_removed = tab_line.pop_back()
+			if(line_removed==null):
+				last_point=null
+			else:
+				last_point=line_removed.get_point_a()
+		elif(n==0):
+			tab_line.pop_front()
+		else:
+			var line_removed = tab_line.pop_at(n)
+			tab_line[n-1].set_point_b(line_removed.get_point_b())
+		if (!has_point(point)):
+			point.toggle(false)
+		calculate_shape()
 
-func preview_add_point(point : Node, state : bool):
-	if state:
-		preview_line_2d.add_point(line_2d.get_point_position(line_2d.get_point_count()-1))
-	else:
-		preview_line_2d.remove_point(0)
-	match _type:
-		"":
-			return 1
-		"line":
-			if state:
-				preview_line_2d.add_point(point.get_coord()*32)
-			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
-		"rectangle":
-			if state:
-				if preview_line_2d.get_point_count()==0:
-					preview_line_2d.add_point(point.get_coord()*32)
-				else:
-					preview_line_2d.add_point(Vector2(point.get_coord().x*32,preview_line_2d.get_point_position(0).y))
-					preview_line_2d.add_point(point.get_coord()*32)
-					preview_line_2d.add_point(Vector2(preview_line_2d.get_point_position(0).x,point.get_coord().y*32))
-					preview_line_2d.add_point(preview_line_2d.get_point_position(0))
-			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(point.get_coord().x*32,preview_line_2d.get_point_position(0).y)))
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(Vector2(preview_line_2d.get_point_position(0).x,point.get_coord().y*32)))
-				preview_line_2d.remove_point(0)
-		"free":
-			if state:
-				preview_line_2d.add_point(point.get_coord()*32)
-			else:
-				preview_line_2d.remove_point(preview_line_2d.points.rfind(point.get_coord()*32))
+func calculate_shape():
+	if (last_point!=null):
+		line_2d.clear_points()
+		line_2d.add_point(get_first_point().get_coord()*32)
+		for n in range (0,tab_line.size(),1):
+			line_2d.add_point(tab_line[n].get_point_b().get_coord()*32)
+
+func done():
+	toggle_points(false)
+	shapes.unselect_shape()
 
 func toggle_points(state : bool):
-	for point in _tab_point :
-		point.toggle(state)
-
-func remove_preview():
-	preview_line_2d.clear_points()
+	if (last_point!=null):
+		last_point.toggle(state)
+		for n in range (tab_line.size()-1,-1,-1):
+			tab_line[n].get_point_a().toggle(state)

@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://cvmcygrmqlmgq"]
 
 [ext_resource type="Texture2D" uid="uid://d3by12xto75l7" path="res://assets/textures.png" id="1_4xfga"]
+[ext_resource type="Script" uid="uid://cxdwp3sejjnb1" path="res://script/shapes.gd" id="2_gldc4"]
 [ext_resource type="PackedScene" uid="uid://cig3a25r7mwfc" path="res://scenes/grid.tscn" id="2_paxxb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_paxxb"]
@@ -15,19 +16,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_paxxb")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0cso3"]
-texture = ExtResource("1_4xfga")
-texture_region_size = Vector2i(32, 32)
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_2klcf"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_0cso3")
-
 [node name="Map" type="Node2D" unique_id=1880370230]
 
 [node name="visuals" type="Node2D" parent="." unique_id=32448289]
@@ -39,14 +27,7 @@ tile_set = SubResource("TileSet_gldc4")
 rendering_quadrant_size = 32
 physics_quadrant_size = 32
 
-[node name="wall" type="TileMapLayer" parent="visuals" unique_id=1368139876]
-texture_filter = 1
-position = Vector2(16, 16)
-tile_map_data = PackedByteArray("AAALAAkAAAABAAIAAAAMAAkAAAABAAIAAAANAAkAAAABAAIAAAAOAAkAAAABAAIAAAAPAAkAAAAEAAIAAAASAAkAAAABAAIAAAATAAkAAAABAAIAAAAUAAkAAAABAAIAAAAVAAkAAAADAAIAAFAKAAkAAAADAAIAAAAKAA4AAAADAAIAAGAVAA4AAAACAAIAAHAKAAoAAAABAAIAAGAKAAsAAAABAAIAAGAKAAwAAAABAAIAAGAKAA0AAAABAAIAAGAVAAoAAAABAAIAAGAVAAsAAAABAAIAAGAVAAwAAAABAAIAAGAVAA0AAAABAAIAAGALAA4AAAABAAIAAAAMAA4AAAABAAIAAAAPAA4AAAABAAIAAAAQAA4AAAABAAIAAAARAA4AAAABAAIAAAASAA4AAAAAAAIAABANAA4AAAABAAIAAAAOAA4AAAABAAIAAAARAAkAAAAEAAIAABA=")
-tile_set = SubResource("TileSet_2klcf")
-rendering_quadrant_size = 32
-physics_quadrant_size = 32
-
 [node name="Shapes" type="Node2D" parent="." unique_id=1908291375]
+script = ExtResource("2_gldc4")
 
-[node name="grid" parent="." unique_id=1551313809 instance=ExtResource("2_paxxb")]
+[node name="grid" parent="Shapes" unique_id=1551313809 instance=ExtResource("2_paxxb")]
